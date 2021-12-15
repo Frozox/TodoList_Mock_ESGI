@@ -57,6 +57,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $lastname;
 
+    public function __construct($email,$password,$birthdate,$firstname,$lastname)
+    {
+        $this->email = $email;
+        $this->password = $password;
+        $this->birthdate = $birthdate;
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -187,6 +196,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             && $this->lastname != null
             && strlen($this->password) >= 8
             && strlen($this->password) <= 40
+            && is_a($this->birthdate,\DateTimeInterface::class)
             && date_diff($this->birthdate, new DateTime())->y >= 13){
             return true;
         }
