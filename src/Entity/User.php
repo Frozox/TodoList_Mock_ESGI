@@ -187,7 +187,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             && $this->lastname != null
             && strlen($this->password) >= 8
             && strlen($this->password) <= 40
-            && date_diff($this->birthdate, new DateTime())->y > 13){
+            && date_diff($this->birthdate, new DateTime())->y >= 13){
             return true;
         }
         return false;
