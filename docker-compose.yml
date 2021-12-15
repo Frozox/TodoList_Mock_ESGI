@@ -1,0 +1,47 @@
+version: '3.5'
+
+services:
+
+  mariadb:
+    image: mariadb:10.7.1
+    container_name: mariadb
+    environment:
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "3306:3306"
+      
+  phpmyadmin:
+    image: phpmyadmin:5.1.1
+    container_name: phpmyadmin
+    depends_on:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: ${DB_USER}
+      PMA_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 9000:80
+
+  php-fpm:
+    image: php:8.0.13-apache-buster
+    build: .docker/build/php-fpm
+    container_name: php-fpm
+    working_dir: /var/www/
+    ports:
+      - 8080:80
+    volumes:
+      - ./:/var/www/
+      - .docker/conf/php-fpm/apache2.conf:/etc/apache2/apache2.conf
+      - .docker/conf/php-fpm/sites-enabled/:/etc/apache2/sites-enabled
+
+  composer:
+    image: composer:2
+    container_name: composer
+    command: composer install
+    depends_on:
+      - php-fpm
+    volumes: 
+      - ./:/app
