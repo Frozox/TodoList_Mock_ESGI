@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -176,5 +178,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->lastname = $lastname;
 
         return $this;
+    }
+
+    public function isValid(): bool
+    {
+        if(filter_var($this->email, FILTER_VALIDATE_EMAIL)
+            && $this->firstname != null
+            && $this->lastname != null
+            && strlen($this->password) >= 8
+            && strlen($this->password) <= 40
+            && date_diff($this->birthdate, new DateTime())->y > 13){
+            return true;
+        }
+        return false;
     }
 }
