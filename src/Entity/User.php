@@ -40,6 +40,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $toDoList;
 
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $birthdate;
+
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=40)
+     */
+    private $lastname;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -123,6 +138,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->toDoList = $toDoList;
+
+        return $this;
+    }
+
+    public function getBirthdate(): ?\DateTimeInterface
+    {
+        return $this->birthdate;
+    }
+
+    public function setBirthdate(\DateTimeInterface $birthdate): self
+    {
+        $this->birthdate = $birthdate;
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
 
         return $this;
     }
