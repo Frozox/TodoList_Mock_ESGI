@@ -2,9 +2,9 @@ version: '3.5'
 
 services:
 
-  mariadb:
+  todo-mariadb:
     image: mariadb:10.7.1
-    container_name: mariadb
+    container_name: todo-mariadb
     environment:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
@@ -13,22 +13,22 @@ services:
     ports:
       - "3306:3306"
       
-  phpmyadmin:
+  todo-phpmyadmin:
     image: phpmyadmin:5.1.1
-    container_name: phpmyadmin
+    container_name: todo-phpmyadmin
     depends_on:
-      - mariadb
+      - todo-mariadb
     environment:
-      PMA_HOST: mariadb
+      PMA_HOST: todo-mariadb
       PMA_USER: ${DB_USER}
       PMA_PASSWORD: ${DB_PASSWORD}
     ports:
       - 9000:80
 
-  php-fpm:
+  todo-php-fpm:
     image: php:8.0.13-apache-buster
     build: .docker/build/php-fpm
-    container_name: php-fpm
+    container_name: todo-php-fpm
     working_dir: /var/www/
     ports:
       - 8080:80
@@ -37,11 +37,11 @@ services:
       - .docker/conf/php-fpm/apache2.conf:/etc/apache2/apache2.conf
       - .docker/conf/php-fpm/sites-enabled/:/etc/apache2/sites-enabled
 
-  composer:
+  todo-composer:
     image: composer:2
-    container_name: composer
+    container_name: todo-composer
     command: composer install
     depends_on:
-      - php-fpm
+      - todo-php-fpm
     volumes: 
       - ./:/app
