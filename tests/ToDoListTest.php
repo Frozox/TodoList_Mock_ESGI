@@ -26,17 +26,26 @@ class ToDoListTest extends TestCase
         $this->assertTrue($isValid);
     }
 
+    //Test d'une todolist valide
     public function testValidToDoList(){
         $isValid = $this->validToDoList->isValid();
         $this->assertTrue($isValid);
-        //$this->validUser->
     }
 
+    //Test d'une 
     public function testValidToDoListToUser(){
         $user = $this->validUser->setToDoList($this->validToDoList);
         $this->assertIsObject($user);
     }
 
+    public function testUserAlreadyHaveToDoList(){
+        $this->expectException(\Exception::class);
+        $tdl = new ToDoList("TodoList already");
+        $this->validUser->setToDoList($this->validToDoList);
+        $this->validUser->setToDoList($tdl);
+    }
+
+    /**** ITEMS ****/
     public function testSimpleItem(){
         $item = new Item("Item","Content",new \DateTimeImmutable("20-12-2021"));
         $this->assertIsObject($item);
@@ -48,8 +57,64 @@ class ToDoListTest extends TestCase
         $this->assertTrue($isValid);
     }
 
+    public function testNotValidItemName(){
+        $this->expectError();
+        $item = new Item(null,"Content",new \DateTimeImmutable("20-12-2021"));
+    }
+
+    public function testNotValidContent(){
+        $this->expectError();
+        $item = new Item("Item",null,new \DateTimeImmutable("20-12-2021"));
+    }
+
+    public function testNotValidContentLength(){
+        $item = new Item("Item",random_bytes(1001),new \DateTimeImmutable("20-12-2021"));
+        $isValid = $item->isValid();
+        $this->assertFalse($isValid);
+    }
+
+    public function testNotValidDate(){
+        $this->expectError();
+        $item = new Item("Item","Content",null);
+    }
+
+    public function testNotValid_DateTimeImmutable(){
+        $this->expectException(\Exception::class);
+        $date = new \DateTimeImmutable("not a valid date");
+        $item = new Item("Item","Content",$date);
+    }
+    /**** FIN ITEMS ****/
+
     public function testAddValidItem(){
         $item = new Item("Item","Content",new \DateTimeImmutable("20-12-2021"));
         $this->assertIsObject($this->validToDoList->addItem($item));
     }
+
+    public function testAddSameItem(){
+        $item = new Item("Item","Content",new \DateTimeImmutable("20-12-2021"));
+        $this->validToDoList->addItem($item);
+        $this->assertFalse($this->validToDoList->addItem($item));
+    }
+
+    public function testAddSameNameItem(){
+        $item1 = new Item("Item","Content",new \DateTimeImmutable("20-12-2021"));
+        $item2 = new Item("Item","Contenu de l'item 2",new \DateTimeImmutable("22-08-1999"));
+        $this->validToDoList->addItem($item1);
+        $this->assertFalse($this->validToDoList->addItem($item2));
+    }
+
+    public function testAddMultipleItem(){
+        $item1 = new Item("Item1","Content",new \DateTimeImmutable("20-12-2021"));
+        $item2 = new Item("Item2","Contenu de l'item 2",new \DateTimeImmutable("22-08-1999"));
+        $this->validToDoList->addItem($item1);
+        $this->assertIsObject($this->validToDoList->addItem($item2));
+    }
+
+    public function testAddTwoItemBefore30mins(){
+        $item1 = new Item("Item1","Content",new \DateTimeImmutable("20-12-2021 00:00:00"));
+        $item2 = new Item("Item2","Contenu de l'item 2",new \DateTimeImmutable("20-12-2021 00:29:00"));
+        $this->validToDoList->addItem($item1);
+        $this->assertFalse($this->validToDoList->addItem($item2));
+    }
+
 }

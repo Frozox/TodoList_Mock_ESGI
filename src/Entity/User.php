@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Carbon\Carbon;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -57,7 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $lastname;
 
-    public function __construct(string $email,string $password,\DateTimeInterface $birthdate, string $firstname, string $lastname)
+    public function __construct($email,$password,$birthdate,$firstname,$lastname)
     {
         $this->email = $email;
         $this->password = $password;
@@ -144,7 +145,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setToDoList(ToDoList $toDoList): self
     {
         // set the owning side of the relation if necessary
-        if (!$this->toDoList){
+        if (empty($this->toDoList)){
             if ($toDoList->getOwner() !== $this) {
                 $toDoList->setOwner($this);
             }
