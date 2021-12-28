@@ -29,7 +29,6 @@ class ToDoListTest extends TestCase
     public function testValidToDoList(){
         $isValid = $this->validToDoList->isValid();
         $this->assertTrue($isValid);
-        //$this->validUser->
     }
 
     public function testValidToDoListToUser(){
@@ -51,5 +50,15 @@ class ToDoListTest extends TestCase
     public function testAddValidItem(){
         $item = new Item("Item","Content",new \DateTimeImmutable("20-12-2021"));
         $this->assertIsObject($this->validToDoList->addItem($item));
+    }
+
+    public function testNotValidItemName(){
+        $this->expectError();
+        $item = new Item(null,"Content",new \DateTimeImmutable("20-12-2021"));
+    }
+
+    public function testNotValidContent(){
+        $this->expectError();
+        $item = new Item("Item",null,new \DateTimeImmutable("20-12-2021"));
     }
 }
