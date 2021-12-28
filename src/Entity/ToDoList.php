@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ToDoListRepository;
+use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -35,8 +36,9 @@ class ToDoList
      */
     private $items;
 
-    public function __construct()
+    public function __construct($name)
     {
+        $this->name = $name;
         $this->items = new ArrayCollection();
     }
 
@@ -77,11 +79,13 @@ class ToDoList
         return $this->items;
     }
 
-    public function addItem(Item $item): self
+    public function addItem(Item $item): self|bool
     {
-        if (!$this->items->contains($item)) {
+        if ($this->itemAddable($item)) {
             $this->items[] = $item;
             $item->setToDoList($this);
+        }else{
+            return false;
         }
 
         return $this;
@@ -97,5 +101,33 @@ class ToDoList
         }
 
         return $this;
+    }
+
+    public function itemAddable(Item $item):bool {
+        $items_liste = $this->items->toArray();
+        if ($this->items->contains($item)){
+            return false;
+        }
+        //On parcourt la liste d'items de la toDoListe et si la date de creation <= date creation de notre item - 30min OU si nom identique on renvoit false
+        foreach ($items_liste as $item_liste){
+            $created_at = $item_liste->getCreatedAt();
+            $name = $item_liste->getName();
+            if ($created_at >= $item->getCreatedAt() || $name === $item->getName()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function isValid(): bool
+    {
+        if (
+            count($this->items) >= 0 &&
+            count($this->items) <= 10
+        ){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
