@@ -3,10 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="f2224181-f273-49d9-ad41-d6b76bae275f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Item.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Item.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/ToDoList.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/ToDoList.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/EmailSenderServiceTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/EmailSenderServiceTest.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/ToDoListTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/ToDoListTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/UserTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/UserTest.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

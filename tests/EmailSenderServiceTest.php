@@ -22,6 +22,7 @@ class EmailSenderServiceTest extends TestCase
         parent::setUp();
     }
 
+    //Test envoi d'un mail après l'ajout de 8 éléments
     public function testSendEmail(): void
     {
         $toDoList = new ToDoList('test', $this->emailSenderService);
@@ -37,8 +38,9 @@ class EmailSenderServiceTest extends TestCase
             $item = new Item("$i","Content",new \DateTimeImmutable("2$i-12-2021"));
             $toDoList->addItem($item);
         }
-    } 
+    }
 
+    //Test AUCUN envoi de mail après l'ajout de 2 éléments
     public function testEmailNotSent(): void
     {
         $toDoList = new ToDoList('test', $this->emailSenderService);
