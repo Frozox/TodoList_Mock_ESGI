@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ItemRepository;
+use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,6 +38,13 @@ class Item
      * @ORM\JoinColumn(nullable=false)
      */
     private $toDoList;
+
+    public function __construct(string $name,string $content, \DateTimeImmutable $created_at)
+    {
+        $this->name = $name;
+        $this->content = $content;
+        $this->created_at = $created_at;
+    }
 
     public function getId(): ?int
     {
@@ -89,5 +97,16 @@ class Item
         $this->toDoList = $toDoList;
 
         return $this;
+    }
+
+    public function isValid(): bool{
+        if (
+            strlen($this->content) <= 1000 &&
+            strlen($this->name) > 0
+        ){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

@@ -57,6 +57,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $lastname;
 
+    public function __construct(string $email,string $password,\DateTimeInterface $birthdate, string $firstname, string $lastname)
+    {
+        $this->email = $email;
+        $this->password = $password;
+        $this->birthdate = $birthdate;
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -135,13 +144,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setToDoList(ToDoList $toDoList): self
     {
         // set the owning side of the relation if necessary
-        if ($toDoList->getOwner() !== $this) {
-            $toDoList->setOwner($this);
+        if (!$this->toDoList){
+            if ($toDoList->getOwner() !== $this) {
+                $toDoList->setOwner($this);
+            }
+
+            $this->toDoList = $toDoList;
+
+            return $this;
+        }else{
+            throw new \Exception("Utilisateur possède déja une todolist");
         }
-
-        $this->toDoList = $toDoList;
-
-        return $this;
     }
 
     public function getBirthdate(): ?\DateTimeInterface
@@ -187,6 +200,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             && $this->lastname != null
             && strlen($this->password) >= 8
             && strlen($this->password) <= 40
+            && is_a($this->birthdate,\DateTimeInterface::class)
             && date_diff($this->birthdate, new DateTime())->y >= 13){
             return true;
         }
