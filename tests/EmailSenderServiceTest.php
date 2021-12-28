@@ -52,7 +52,7 @@ class EmailSenderServiceTest extends TestCase
             $item = new Item("$i","Content",new \DateTimeImmutable("2$i-12-2021"));
             $toDoList->addItem($item);
         }
-    } 
+    }
 
 }
 
