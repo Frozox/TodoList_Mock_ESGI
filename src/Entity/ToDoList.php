@@ -35,11 +35,13 @@ class ToDoList
      * @ORM\OneToMany(targetEntity=Item::class, mappedBy="toDoList", orphanRemoval=true)
      */
     private $items;
+    private $emailSenderService;
 
-    public function __construct($name)
+    public function __construct($name, $emailSenderService = null)
     {
         $this->name = $name;
         $this->items = new ArrayCollection();
+        $this->emailSenderService = $emailSenderService;
     }
 
     public function getId(): ?int
@@ -84,6 +86,9 @@ class ToDoList
         if ($this->itemAddable($item)) {
             $this->items[] = $item;
             $item->setToDoList($this);
+            if ($this->hasNumberItems(8)) {
+                $this->emailSenderService->sendEmail($this->getOwner()->getEmail(), 'ToDoList', 'Votre ToDoList est plein');
+            }   
             return $this;
         }else{
             return false;
@@ -121,6 +126,15 @@ class ToDoList
         ){
             return true;
         }else{
+            return false;
+        }
+    }
+
+    public function hasNumberItems($number): bool
+    {
+        if (count($this->items) === $number){
+            return true;
+        } else {
             return false;
         }
     }
