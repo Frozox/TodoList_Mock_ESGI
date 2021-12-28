@@ -130,4 +130,15 @@ class ToDoListTest extends TestCase
         $this->assertFalse($this->validToDoList->addItem($item2));
     }
 
+    //Ajout de dix items
+    public function testAddMoreThan10Item(){
+        for ($i = 0; $i < 10; $i++){
+            $item = new Item("Item$i","Content",new \DateTimeImmutable("01-12-201$i"));
+            $this->validToDoList->addItem($item);
+        }
+        $item = new Item("Item$i","Content",new \DateTimeImmutable("01-12-20$i"));
+
+        $this->assertFalse($this->validToDoList->addItem($item));
+    }
+
 }

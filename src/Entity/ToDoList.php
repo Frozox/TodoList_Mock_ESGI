@@ -83,10 +83,10 @@ class ToDoList
 
     public function addItem(Item $item): self|bool
     {
-        if ($this->itemAddable($item)) {
+        if ($this->itemAddable($item) && $this->items->count() <= 10) {
             $this->items[] = $item;
             $item->setToDoList($this);
-            if ($this->hasNumberItems(8)) {
+            if ($this->hasNumberItems(8) && !is_null($this->emailSenderService)) {
                 $this->emailSenderService->sendEmail($this->getOwner()->getEmail(), 'ToDoList', 'Votre ToDoList est plein');
             }   
             return $this;
