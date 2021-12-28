@@ -84,11 +84,10 @@ class ToDoList
         if ($this->itemAddable($item)) {
             $this->items[] = $item;
             $item->setToDoList($this);
+            return $this;
         }else{
             return false;
         }
-
-        return $this;
     }
 
     public function removeItem(Item $item): self
@@ -104,15 +103,10 @@ class ToDoList
     }
 
     public function itemAddable(Item $item):bool {
-        $items_liste = $this->items->toArray();
-        if ($this->items->contains($item)){
-            return false;
-        }
         //On parcourt la liste d'items de la toDoListe et si la date de creation <= date creation de notre item - 30min OU si nom identique on renvoit false
-        foreach ($items_liste as $item_liste){
-            $created_at = $item_liste->getCreatedAt();
-            $name = $item_liste->getName();
-            if ($created_at >= $item->getCreatedAt() || $name === $item->getName()){
+        foreach ($this->items as $current_item) {
+            $date_diff = date_diff($current_item->getCreatedAt(), $item->getCreatedAt());
+            if ($current_item->getName() === $item->getName() || ($date_diff->days === 0 && $date_diff->i < 30) || $current_item->getId() === $item->getId()){ //$current_item->getCreatedAt() >= $item->getCreatedAt() ||
                 return false;
             }
         }

@@ -41,12 +41,13 @@ class Item
 
     public function __construct(string $name,string $content, \DateTimeImmutable $created_at)
     {
+        $this->id = uniqid();
         $this->name = $name;
         $this->content = $content;
         $this->created_at = $created_at;
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -102,7 +103,8 @@ class Item
     public function isValid(): bool{
         if (
             strlen($this->content) <= 1000 &&
-            strlen($this->name) > 0
+            strlen($this->name) > 0 &&
+            is_a($this->created_at, \DateTimeImmutable::class)
         ){
             return true;
         }else{

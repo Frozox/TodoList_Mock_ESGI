@@ -145,7 +145,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setToDoList(ToDoList $toDoList): self
     {
         // set the owning side of the relation if necessary
-        if (!$this->toDoList){
+        if (empty($this->toDoList)){
             if ($toDoList->getOwner() !== $this) {
                 $toDoList->setOwner($this);
             }
